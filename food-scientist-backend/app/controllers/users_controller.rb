@@ -9,7 +9,13 @@ class UsersController < ApplicationController
         render json: UserSerializer.new(user)
     end
 
-    # def create 
+    def create 
+        user = User.create(user_params)
+        render json: UserSerializer.new(user)
+    end
 
-    # end
+    private
+    def user_params
+        params.permit(:username, :email)
+    end
 end

@@ -1,4 +1,4 @@
-/* .main div {
+.main div {
     background: #A27157;
     padding: 20px;
 }
@@ -9,8 +9,9 @@
     grid-gap: 12px;
     margin: 15px;
     grid-template-areas: 
-    "header header header"
-    "container container userBox"
+    "header header"
+    "container userBox"
+    "lessonBox lessonBox"
 }
 
 .header {
@@ -19,5 +20,9 @@
 
 .userBox {
     grid-area: userBox;
-} */
+}
+
+.lessonBox {
+    grid-area: lessonBox;
+}
 
