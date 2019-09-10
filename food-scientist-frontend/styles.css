@@ -1,0 +1,23 @@
+/* .main div {
+    background: #A27157;
+    padding: 20px;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 12px;
+    margin: 15px;
+    grid-template-areas: 
+    "header header header"
+    "container container userBox"
+}
+
+.header {
+    grid-area: header;
+}
+
+.userBox {
+    grid-area: userBox;
+} */
+
