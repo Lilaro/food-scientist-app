@@ -1,21 +1,28 @@
-.main div {
-    background: #A27157;
+.body div {
+    background: #ee7646;
     padding: 20px;
+    margin: 10px
 }
 
 .main {
+    background: #966842;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 12px;
     margin: 15px;
     grid-template-areas: 
-    "header header"
-    "container userBox"
-    "lessonBox lessonBox"
+    "header header header"
+    "container container userBox"
+    "lessonBox lessonBox lessonBox"
 }
 
 .header {
     grid-area: header;
+    background: #e7a53a
+}
+
+.container {
+    grid-area: container;
 }
 
 .userBox {
