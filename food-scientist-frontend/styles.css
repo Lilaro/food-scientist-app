@@ -1,15 +1,18 @@
 .body div {
     background: #ee7646;
+    border-radius: 8px;
     padding: 20px;
-    margin: 10px
+    margin: 10px;
+    box-shadow: 5px 10px #88888860
 }
 
 .main {
     background: #966842;
+    border-radius: 15px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 12px;
-    margin: 15px;
+    margin: 7px;
     grid-template-areas: 
     "header header header"
     "container container userBox"
@@ -18,7 +21,8 @@
 
 .header {
     grid-area: header;
-    background: #e7a53a
+    background: #e7a53a;
+    border-radius: 3px
 }
 
 .container {
@@ -31,5 +35,6 @@
 
 .lessonBox {
     grid-area: lessonBox;
+    height: 250px
 }
 
