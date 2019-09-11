@@ -20,9 +20,6 @@ function getTopics() {
 }
 
 topicContainer.addEventListener("click", (event) => {
-    
-    console.log(event)
-    console.log(event.target)
     // debugger
     if (event.target.className === "card") {
         const topicID = event.target.dataset.id
@@ -30,25 +27,43 @@ topicContainer.addEventListener("click", (event) => {
     fetch(`http://localhost:3000/topics/${topicID}`)
     .then(resp => resp.json())
     .then(topic => {
-        console.log(topic.data.id)
         lessonBox.innerHTML = ""
         lessonBox.innerHTML += `
+        <h4>${topic.data.attributes.name}</h4>
         <p>${topic.data.attributes.lesson})</p>
-        <button class="lessonComplete">Lesson Complete</button>
+        <button data-id="${topic.data.id}" class="lessonComplete">Lesson Complete</button>
         `
     })
     }
 })
 
+lessonBox.addEventListener("click", (event) => {
+    debugger
+    if (event.target.className === "lessonComplete") {
+        event.preventDefault()
+        fetch(`http://localhost:3000/achievements`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'topic_id': event.target.dataset.id,
+                'user_id': userBox.children[4].dataset.id
+            })
+        })
+        .then(resp => resp.json())
+        .then((achievement) => {
+            console.log(achievement)
+            debugger
+        })
+    }
+})
 
 userBox.addEventListener("submit", (event) => {
     event.preventDefault()
-    console.log(event)
-    console.log(event.target)
-    debugger
+    // debugger
     if (event.target.className === "userForm") {
         event.preventDefault()
-        console.log('')
         const config = {
             method: 'POST',
             headers: {
@@ -64,21 +79,20 @@ userBox.addEventListener("submit", (event) => {
         fetch(usersURL, config)
         .then(resp => resp.json())
         .then((user) => { 
+            console.log(user)
             userBox.innerHTML = ""
             renderUserInfo(user)
         })
     }
 
-    else if (event.target.classList === "deleteButton"){
-        console.log(event.target)
-        console.log('clicked deleteButton')
-        debugger
-    }
+    // else if (event.target.classList === "updateButton"){
+    
+    //     debugger
+    // }
     
 })
 
 userBox.addEventListener("click", (event) => {
-    console.log(event.target)
     if (event.target.className === "deleteButton") {
         event.preventDefault()
         fetch(usersURL + `${event.target.dataset.id}`, {
