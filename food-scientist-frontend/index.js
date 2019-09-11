@@ -1,9 +1,11 @@
-const topicsURL = 'http://localhost:3000/topics'
-const usersURL = 'http://localhost:3000/users'
+const topicsURL = 'http://localhost:3000/topics/'
+const usersURL = 'http://localhost:3000/users/'
 const topicContainer = document.querySelector(".container")
 const userBox = document.querySelector(".userBox")
 const lessonBox = document.querySelector(".lessonBox")
-const userForm = document.querySelector(".userForm")
+let userForm = document.querySelector(".userForm")
+let updateButton = document.querySelector(".updateButton")
+let deleteButton = document.querySelector(".deleteButton")
 
 
 function getTopics() {
@@ -14,8 +16,7 @@ function getTopics() {
         topicObjs.data.forEach(topic => {
             renderTopics(topic)
         })
-    })
-    
+    })   
 }
 
 topicContainer.addEventListener("click", (event) => {
@@ -33,43 +34,66 @@ topicContainer.addEventListener("click", (event) => {
         lessonBox.innerHTML = ""
         lessonBox.innerHTML += `
         <p>${topic.data.attributes.lesson})</p>
-        <button class="lessonComplete">Lesson Complete</button>`
+        <button class="lessonComplete">Lesson Complete</button>
+        `
     })
     }
 })
 
 
-userForm.addEventListener("submit", (event) => {
+userBox.addEventListener("submit", (event) => {
     event.preventDefault()
     console.log(event)
     console.log(event.target)
+    debugger
+    if (event.target.className === "userForm") {
+        event.preventDefault()
+        console.log('')
+        const config = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                'username': event.target.username.value,
+                'email': event.target.email.value
+            })
+        }
 
-    const config = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            'username': event.target.username.value,
-            'email': event.target.email.value
+        fetch(usersURL, config)
+        .then(resp => resp.json())
+        .then((user) => { 
+            userBox.innerHTML = ""
+            renderUserInfo(user)
         })
     }
 
-    fetch(usersURL, config)
-    .then(resp => resp.json())
-    .then((user) => { 
-         userBox.innerHTML = ""
-        renderUserInfo(user)
-    })
+    else if (event.target.classList === "deleteButton"){
+        console.log(event.target)
+        console.log('clicked deleteButton')
+        debugger
+    }
+    
+})
+
+userBox.addEventListener("click", (event) => {
+    console.log(event.target)
+    if (event.target.className === "deleteButton") {
+        event.preventDefault()
+        fetch(usersURL + `${event.target.dataset.id}`, {
+            method: 'DELETE'
+        })
+        .then(res => {
+            console.log('that shit is deleted')
+            window.location.reload()
+          })
+    }
 })
 
 
 
-
-function renderTopics(topic) {
-    // topicImg = document.querySelector("img")
-    // topicHeader = document.querySelector("h4")   
+function renderTopics(topic) {  
     topicContainer.innerHTML += `
         <div data-id=${topic.id} class="card">
         <img src=${topic.attributes.photo} width="200" height="121">
@@ -82,23 +106,21 @@ function renderTopics(topic) {
 // createdForm.innerText/html =`bleh`
 function renderUserInfo(user) {
     userBox.innerHTML += `
-        <h4>Hi ${user.data.attributes.username}!</h4>
+        <h3>Hi ${user.data.attributes.username}!</h3>
         <h5>Your Badges</h5>
+        <div class="badgeContainer"></div>
         <form class="userUpdateForm">
             Change Username:<br>
-            <input type="text" name="username" value="">
+            <input type="text" name="username" value=""> 
             <br>
-            Change Email:<br>
-            <input type="text" name="email" value="">
-            <br>
-            <br>
-            <input class="updateButton" type="submit" name="submit">
+            <button data-id=${user.data.id} class="updateButton"> Change Username </button>
             <br>
             </form>
-        ` 
-        let userUpdateForm = document.querySelector(".userUpdateForm")
+            <button data-id=${user.data.id} class="deleteButton"> Delete Me </button>
+            `   
+        let userUpdateForm = document.querySelector(".userUpdateForm")  
 }
-// TRY AFTER ACHIEVEMENTS ARE A THING
+// TRY THIS AFTER ACHIEVEMENTS ARE A THING
     // function renderBadges(user) {
     // let badgeContainer = document.querySelector(".badgeContainer")
     // user.achievements.forEach((achievement => {
