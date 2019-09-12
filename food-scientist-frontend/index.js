@@ -8,6 +8,7 @@ let updateButton = document.querySelector(".updateButton")
 let deleteButton = document.querySelector(".deleteButton")
 
 
+
 function getTopics() {
     fetch(topicsURL)
     .then(resp => resp.json())
@@ -34,13 +35,15 @@ topicContainer.addEventListener("click", (event) => {
         <button data-id="${topic.data.id}" class="lessonComplete">Lesson Complete</button>
         `
     })
-    }
+}
 })
+getTopics()
 
 lessonBox.addEventListener("click", (event) => {
-    debugger
+    // debugger
     if (event.target.className === "lessonComplete") {
         event.preventDefault()
+        let badgeContainer = document.querySelector(".badgeContainer")
         fetch(`http://localhost:3000/achievements`,{
             method: 'POST',
             headers: {
@@ -54,7 +57,10 @@ lessonBox.addEventListener("click", (event) => {
         .then(resp => resp.json())
         .then((achievement) => {
             console.log(achievement)
-            debugger
+            // badgeContainer.innerHTML = ""
+            badgeContainer.innerHTML += `
+            <img src="https://cdn.pixabay.com/photo/2016/10/29/20/26/award-1781445__340.png" width="32" height="40">
+            `
         })
     }
 })
@@ -83,12 +89,26 @@ userBox.addEventListener("submit", (event) => {
             userBox.innerHTML = ""
             renderUserInfo(user)
         })
-    }
-
-    // else if (event.target.classList === "updateButton"){
-    
-    //     debugger
-    // }
+    } else if (event.target.className === "userUpdateForm") //or userUpdateForm??
+        event.preventDefault()
+        console.log('update form clicked')
+        fetch(usersURL + `${event.target.dataset.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                'username': event.target.username.value,
+                'email': event.target.email.value
+            })
+        }).then(resp => resp.json())
+          .then((user) => {
+            //   renderUserInfo(user)
+            console.log(event.target.username.value)
+            event.target.reset()
+            
+          })
     
 })
 
@@ -123,17 +143,22 @@ function renderUserInfo(user) {
         <h3>Hi ${user.data.attributes.username}!</h3>
         <h5>Your Badges</h5>
         <div class="badgeContainer"></div>
-        <form class="userUpdateForm">
+        <form data-id=${user.data.id} class="userUpdateForm">
             Change Username:<br>
-            <input type="text" name="username" value=""> 
-            <br>
-            <button data-id=${user.data.id} class="updateButton"> Change Username </button>
+                    <input type="text" name="username" value="">
+                    <br>
+            Change Email:<br>
+                    <input type="text" name="email" value="">
+                  <br>
+            <button data-id=${user.data.id} class="updateButton"> Update </button>
             <br>
             </form>
             <button data-id=${user.data.id} class="deleteButton"> Delete Me </button>
             `   
         let userUpdateForm = document.querySelector(".userUpdateForm")  
+    
 }
+
 // TRY THIS AFTER ACHIEVEMENTS ARE A THING
     // function renderBadges(user) {
     // let badgeContainer = document.querySelector(".badgeContainer")
@@ -142,5 +167,3 @@ function renderUserInfo(user) {
     //    <img src=${achievement.topic.photo}>`
     //  }))
     // }
-
-getTopics()
