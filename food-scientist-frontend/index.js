@@ -8,7 +8,6 @@ let updateButton = document.querySelector(".updateButton")
 let deleteButton = document.querySelector(".deleteButton")
 
 
-
 function getTopics() {
     fetch(topicsURL)
     .then(resp => resp.json())
@@ -21,10 +20,8 @@ function getTopics() {
 }
 
 topicContainer.addEventListener("click", (event) => {
-    // debugger
     if (event.target.className === "card") {
         const topicID = event.target.dataset.id
-        // debugger
     fetch(`http://localhost:3000/topics/${topicID}`)
     .then(resp => resp.json())
     .then(topic => {
@@ -35,12 +32,12 @@ topicContainer.addEventListener("click", (event) => {
         <button data-id="${topic.data.id}" class="lessonComplete">Lesson Complete</button>
         `
     })
-}
+    }
 })
+
 getTopics()
 
 lessonBox.addEventListener("click", (event) => {
-    // debugger
     if (event.target.className === "lessonComplete") {
         event.preventDefault()
         let badgeContainer = document.querySelector(".badgeContainer")
@@ -56,8 +53,6 @@ lessonBox.addEventListener("click", (event) => {
         })
         .then(resp => resp.json())
         .then((achievement) => {
-            console.log(achievement)
-            // badgeContainer.innerHTML = ""
             badgeContainer.innerHTML += `
             <img src="https://cdn.pixabay.com/photo/2016/10/29/20/26/award-1781445__340.png" width="32" height="40">
             `
@@ -67,7 +62,6 @@ lessonBox.addEventListener("click", (event) => {
 
 userBox.addEventListener("submit", (event) => {
     event.preventDefault()
-    // debugger
     if (event.target.className === "userForm") {
         event.preventDefault()
         const config = {
@@ -81,7 +75,6 @@ userBox.addEventListener("submit", (event) => {
                 'email': event.target.email.value
             })
         }
-
         fetch(usersURL, config)
         .then(resp => resp.json())
         .then((user) => { 
@@ -89,7 +82,7 @@ userBox.addEventListener("submit", (event) => {
             userBox.innerHTML = ""
             renderUserInfo(user)
         })
-    } else if (event.target.className === "userUpdateForm") //or userUpdateForm??
+    } else if (event.target.className === "userUpdateForm")
         event.preventDefault()
         console.log('update form clicked')
         fetch(usersURL + `${event.target.dataset.id}`, {
@@ -119,13 +112,10 @@ userBox.addEventListener("click", (event) => {
             method: 'DELETE'
         })
         .then(res => {
-            console.log('that shit is deleted')
             window.location.reload()
           })
     }
 })
-
-
 
 function renderTopics(topic) {  
     topicContainer.innerHTML += `
@@ -136,7 +126,7 @@ function renderTopics(topic) {
         `
 }
 // userBox.append(createdForm)
-// doctument.createElement(createdForm)
+// document.createElement(createdForm)
 // createdForm.innerText/html =`bleh`
 function renderUserInfo(user) {
     userBox.innerHTML += `
